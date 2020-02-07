@@ -32,15 +32,35 @@ namespace JSB
             string connectionString = "datasource=127.0.0.1;port=3306;username=root;password=;database=inscription;";
             MySqlConnection databaseConnection = new MySqlConnection(connectionString);
             //Ici il y aura tout le code permettant d'intérragir avec la base de données//
-            databaseConnection.Open();
-            MySqlCommand query = new MySqlCommand();
-            query.Connection = databaseConnection;
-            query.CommandText = "select id_mail from identifiant where id_mail=\"" + UsernameTextBox + "\";";
-            var usernameSelect = query.ExecuteReader();
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql = "";
+
+            sql = "select id_mail from identifiant where id_mail=\"" + UsernameTextBox + "\";";
+            command = new SqlCommand(sql);
+            dataReader = command.ExecuteReader();
+            string usernameSelect = "";
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            databaseConnection.Open(); 
+ 
+            while (dataReader.Read())
+            {
+                usernameSelect = usernameSelect + dataReader.GetValue(0);
+            }
             databaseConnection.Close();
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            string passwordSelect = "";
+            sql = "select id_mdp from identifiant where id_mdp=\"" + PasswordTextBox + "\";";
+
             databaseConnection.Open();
-            query.CommandText = "select * from identifiant where id_mdp=\"" + PasswordTextBox + "\";";
-            var passwordSelect = query.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                passwordSelect = passwordSelect + dataReader.GetValue(0);
+            }
+
             databaseConnection.Close();
             if (usernameSelect.Equals("maxime.giera@gmail.com") && passwordSelect.Equals("1973"))
             {
